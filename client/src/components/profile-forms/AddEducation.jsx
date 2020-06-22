@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { addEducation } from '../../actions/profile';
 import styled from 'styled-components';
 
@@ -29,7 +28,7 @@ const AddEducationContainer = styled.div`
   }
 `;
 
-const AddEducation = ({ addEducation, history }) => {
+const AddEducation = ({ history }) => {
   const [formData, setFormData] = useState({
     school: '',
     degree: '',
@@ -39,6 +38,7 @@ const AddEducation = ({ addEducation, history }) => {
     current: false,
     description: '',
   });
+  const dispatch = useDispatch();
 
   const [toDateDisabled, toggleDisabled] = useState(false);
 
@@ -67,7 +67,7 @@ const AddEducation = ({ addEducation, history }) => {
         className="form"
         onSubmit={(e) => {
           e.preventDefault();
-          addEducation(formData, history);
+          dispatch(addEducation(formData, history));
         }}
       >
         <div className="form-group">
@@ -152,8 +152,4 @@ const AddEducation = ({ addEducation, history }) => {
   );
 };
 
-AddEducation.propTypes = {
-  addEducation: PropTypes.func.isRequired,
-};
-
-export default connect(null, { addEducation })(withRouter(AddEducation));
+export default AddEducation;

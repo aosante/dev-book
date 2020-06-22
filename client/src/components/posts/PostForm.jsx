@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addPost } from '../../actions/post';
 import styled from 'styled-components';
 
@@ -15,8 +14,10 @@ const Form = styled.form`
   }
 `;
 
-const PostForm = ({ addPost }) => {
+const PostForm = () => {
   const [text, setText] = useState('');
+  const dispatch = useDispatch();
+
   return (
     <div className="post-form">
       <div className="bg-primary p">
@@ -26,7 +27,7 @@ const PostForm = ({ addPost }) => {
         className="form my-1"
         onSubmit={(e) => {
           e.preventDefault();
-          addPost({ text });
+          dispatch(addPost({ text }));
           setText('');
         }}
       >
@@ -45,8 +46,4 @@ const PostForm = ({ addPost }) => {
   );
 };
 
-PostForm.propTypes = {
-  addPost: PropTypes.func.isRequired,
-};
-
-export default connect(null, { addPost })(PostForm);
+export default PostForm;

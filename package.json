@@ -14,7 +14,7 @@
   "author": "Andrés Osante",
   "license": "MIT",
   "dependencies": {
-    "acorn": "^7.2.0",
+    "acorn": "^7.3.1",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.1",
     "express": "^4.17.1",
@@ -22,7 +22,7 @@
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "minimist": "^1.2.5",
-    "mongoose": "^5.9.13",
+    "mongoose": "^5.9.19",
     "request": "^2.88.2",
     "validator": "^10.11.0"
   },

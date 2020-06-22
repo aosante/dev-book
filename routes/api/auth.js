@@ -28,7 +28,7 @@ router.post(
   '/',
   [
     check('email', 'Please enter a valid email').isEmail(),
-    check('password', 'The password is required').exists()
+    check('password', 'The password is required').exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -56,7 +56,7 @@ router.post(
       //return jwt (to logged the user in as soon as they register)
       const payload = { user: { id: user.id } };
       //signing and returning the token
-      jwt.sign(payload, secret, { expiresIn: '3600000' }, (err, token) => {
+      jwt.sign(payload, secret, { expiresIn: '36000000' }, (err, token) => {
         if (err) throw err;
         res.json({ token });
       });

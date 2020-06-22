@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getPosts } from '../../actions/post';
 import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
@@ -11,10 +10,16 @@ const PostsContainer = styled.div`
   margin: 6.5rem auto 0rem;
 `;
 
-const Posts = ({ getPosts, post: { posts, loading } }) => {
+const Posts = () => {
+  const posts = useSelector((state) => state.post.posts);
+  const loading = useSelector((state) => state.post.loading);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getPosts();
+    dispatch(getPosts());
+    //eslint-disable-next-line
   }, [getPosts]);
+
   return loading ? (
     <Spinner />
   ) : (
@@ -34,13 +39,4 @@ const Posts = ({ getPosts, post: { posts, loading } }) => {
   );
 };
 
-Posts.propTypes = {
-  getPosts: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  post: state.post,
-});
-
-export default connect(mapStateToProps, { getPosts })(Posts);
+export default Posts;

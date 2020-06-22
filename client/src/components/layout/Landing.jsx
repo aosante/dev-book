@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import bg from '../../img/hero-bg.jpeg';
 import styled from 'styled-components';
 
@@ -52,7 +51,9 @@ const Section = styled.section`
   }
 `;
 
-const Landing = ({ isAuthenticated }) => {
+const Landing = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
@@ -77,12 +78,4 @@ const Landing = ({ isAuthenticated }) => {
   );
 };
 
-Landing.propTypes = {
-  isAuthenticated: PropTypes.bool
-};
-
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(mapStateToProps)(Landing);
+export default Landing;

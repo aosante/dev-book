@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ProfileItem from './ProfileItem';
 import { getProfiles } from '../../actions/profile';
@@ -16,10 +15,16 @@ const ProfilesContainer = styled.div`
   }
 `;
 
-const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
+const Profiles = () => {
+  const profiles = useSelector((state) => state.profile.profiles);
+  const loading = useSelector((state) => state.profile.loading);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getProfiles();
+    dispatch(getProfiles());
+    // eslint-disable-next-line
   }, [getProfiles]);
+
   return loading ? (
     <Spinner></Spinner>
   ) : (
@@ -31,7 +36,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
       </p>
       <div>
         {profiles.length > 0 ? (
-          profiles.map(profile => (
+          profiles.map((profile) => (
             <ProfileItem key={profile._id} profile={profile} />
           ))
         ) : (
@@ -42,13 +47,4 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   );
 };
 
-Profiles.propTypes = {
-  getProfiles: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  profile: state.profile
-});
-
-export default connect(mapStateToProps, { getProfiles })(Profiles);
+export default Profiles;

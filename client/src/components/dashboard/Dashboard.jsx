@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions';
 import Experience from './Experience';
@@ -13,15 +12,17 @@ const DashboardContainer = styled.div`
   margin: 6.5rem auto 0rem;
 `;
 
-const Dashboard = ({
-  getCurrentProfile,
-  deleteAccount,
-  auth: { user },
-  profile: { profile, loading },
-}) => {
+const Dashboard = () => {
+  const user = useSelector((state) => state.auth.user);
+  const profile = useSelector((state) => state.profile.profile);
+  const loading = useSelector((state) => state.profile.loading);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getCurrentProfile();
+    dispatch(getCurrentProfile());
+    // eslint-disable-next-line
   }, [getCurrentProfile]);
+
   return loading && profile === null ? (
     <Spinner></Spinner>
   ) : (
@@ -37,7 +38,10 @@ const Dashboard = ({
           <Education education={profile.education} />
 
           <div className="my-2">
-            <button className="btn btn-danger" onClick={() => deleteAccount()}>
+            <button
+              className="btn btn-danger"
+              onClick={() => dispatch(deleteAccount())}
+            >
               <i className="fa fa-user-minus"></i> Delete My Account
             </button>
           </div>
@@ -54,18 +58,4 @@ const Dashboard = ({
   );
 };
 
-Dashboard.propTypes = {
-  getCurrentProfile: PropTypes.func.isRequired,
-  deleteAccount: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  profile: state.profile,
-});
-
-export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
-  Dashboard
-);
+export default Dashboard;
