@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getGithubRepos } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 
-const ProfileGithub = ({
-  username,
-  getGithubRepos,
-  profile: { repos, loading }
-}) => {
+const ProfileGithub = ({ username }) => {
+  const repos = useSelector((state) => state.profile.repos);
+  const loading = useSelector((state) => state.profile.loading);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getGithubRepos(username);
+    dispatch(getGithubRepos(username));
+    // eslint-disable-next-line
   }, [getGithubRepos, username]);
 
   // all this data is coming from the Github API and not the Mongo database
@@ -22,7 +24,7 @@ const ProfileGithub = ({
       ) : repos.length === 0 ? (
         <Spinner />
       ) : (
-        repos.map(repo => (
+        repos.map((repo) => (
           <div key={repo.id} className="repo bg-white p-1 my-1">
             <div>
               <h4>
@@ -55,13 +57,7 @@ const ProfileGithub = ({
 };
 
 ProfileGithub.propTypes = {
-  getGithubRepos: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired
+  username: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile
-});
-
-export default connect(mapStateToProps, { getGithubRepos })(ProfileGithub);
+export default ProfileGithub;

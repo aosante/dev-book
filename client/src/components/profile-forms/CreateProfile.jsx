@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, withRouter, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
 import styled from 'styled-components';
 
@@ -50,12 +49,7 @@ const CreateProfileContainer = styled.div`
   }
 `;
 
-const CreateProfile = ({
-  createProfile,
-  getCurrentProfile,
-  profile: { profile, loading },
-  history,
-}) => {
+const CreateProfile = ({ history }) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -71,6 +65,12 @@ const CreateProfile = ({
     instagram: '',
   });
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+  const profile = useSelector((state) => state.profile.profile);
+  const loading = useSelector((state) => state.profile.loading);
+
+  const dispatch = useDispatch();
+
   const {
     company,
     website,
@@ -85,16 +85,20 @@ const CreateProfile = ({
     youtube,
     instagram,
   } = formData;
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
   const onSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history);
+    dispatch(createProfile(formData, history));
   };
+
   useEffect(() => {
-    getCurrentProfile();
+    dispatch(getCurrentProfile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCurrentProfile]);
+
   return loading && profile === null ? (
     <Redirect to="/dashboard" />
   ) : (
@@ -271,14 +275,4 @@ const CreateProfile = ({
   );
 };
 
-CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-};
-const mapStateToProps = (state) => ({
-  profile: state.profile,
-});
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  withRouter(CreateProfile)
-);
+export default CreateProfile;

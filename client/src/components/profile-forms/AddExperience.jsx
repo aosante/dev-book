@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { addExperience } from '../../actions/profile';
 import styled from 'styled-components';
 
@@ -29,7 +28,7 @@ const AddExperienceContainer = styled.div`
   }
 `;
 
-const AddExperience = ({ addExperience, history }) => {
+const AddExperience = ({ history }) => {
   const [formData, setFormData] = useState({
     company: '',
     title: '',
@@ -39,6 +38,7 @@ const AddExperience = ({ addExperience, history }) => {
     current: false,
     description: '',
   });
+  const dispatch = useDispatch();
 
   const [toDateDisabled, toggleDisabled] = useState(false);
 
@@ -59,7 +59,7 @@ const AddExperience = ({ addExperience, history }) => {
         className="form"
         onSubmit={(e) => {
           e.preventDefault();
-          addExperience(formData, history);
+          dispatch(addExperience(formData, history));
         }}
       >
         <div className="form-group">
@@ -144,8 +144,4 @@ const AddExperience = ({ addExperience, history }) => {
   );
 };
 
-AddExperience.propTypes = {
-  addExperience: PropTypes.func.isRequired,
-};
-
-export default connect(null, { addExperience })(withRouter(AddExperience));
+export default AddExperience;
